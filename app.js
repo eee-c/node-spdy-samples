@@ -3,48 +3,20 @@
  * Module dependencies.
  */
 
-var express = require('express-spdy')
+var express = require('express')
+  , spdy = require('spdy')
   , fs = require('fs');
-//  , gzip = require('connect-gzip');
+
 
 //var app = module.exports = express.createServer();
 
-var app = module.exports = express.createServer({
+var options = {
   key: fs.readFileSync(__dirname + '/keys/spdy-key.pem'),
   cert: fs.readFileSync(__dirname + '/keys/spdy-cert.pem'),
-  ca: fs.readFileSync(__dirname + '/keys/spdy-csr.pem'),
-  NPNProtocols: ['spdy/2', 'http/1.1'],
-  push: simplePush
-});
+  ca: fs.readFileSync(__dirname + '/keys/spdy-csr.pem')
+};
 
-
-function simplePush(response) {
-  // Only push in response to the first request
-  if (response.streamID > 1) return;
-
-
-  response.pushFile.apply(response, local_path_and_url("stylesheets/style.css"));
-  response.pushFile.apply(response, local_path_and_url("javascripts/jquery-1.6.2.min.js"));
-  response.pushFile.apply(response, local_path_and_url("images/00-h.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/01-e.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/02-l.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/03-l.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/04-o.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/05-space.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/06-w.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/07-o.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/08-r.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/09-l.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/10-d.jpg"));
-  response.pushFile.apply(response, local_path_and_url("images/11-bang.jpg"));
-}
-
-function local_path_and_url(relative_path) {
-  return [
-    "public/" + relative_path,
-    "https://localhost:3000/" + relative_path
-  ];
-}
+var app = spdy.createServer(express.HTTPSServer, options);
 
 
 // Configuration
@@ -79,10 +51,32 @@ app.get('/', function(req, res){
 });
 
 app.get('/real', function(req, res){
+  // res.pushFile.apply(res, local_path_and_url("stylesheets/style.css"));
+  // res.pushFile.apply(res, local_path_and_url("javascripts/jquery-1.6.2.min.js"));
+  // res.pushFile.apply(res, local_path_and_url("images/00-h.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/01-e.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/02-l.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/03-l.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/04-o.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/05-space.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/06-w.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/07-o.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/08-r.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/09-l.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/10-d.jpg"));
+  // res.pushFile.apply(res, local_path_and_url("images/11-bang.jpg"));
+
   res.render('real', {
     title: 'Hello (real) World!'
   });
 });
+
+function local_path_and_url(relative_path) {
+  return [
+    "public/" + relative_path,
+    "https://localhost:3000/" + relative_path
+  ];
+}
 
 app.listen(3000);
 console.log("Express server listening on port %d", app.address().port);

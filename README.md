@@ -1,8 +1,18 @@
 # Server Push Example
 
-This example runs on node-spdy 0.6.x only -- *not* on the unstable 0.7 series. It requires openssl 1.0.1 or higher. See [install instructions](https://github.com/eee-c/express-spdy/blob/master/INSTALL.md) in [express-spdy](https://github.com/eee-c/express-spdy) for info (or use Ubuntu 12.04).
+This example runs only on the *unstable 0.7 series*. It also requires that you install node-spdy from a git brach.
 
-If you have node.js setup properly, you should be able to run this by:
+To install node-spdy, run the following in a separate directory:
 
-    npm install
+    git clone git://github.com/indutny/node-spdy.git
+    git co spdy-v3
+    npm link
+
+Now, install the packages required, including the local node-spdy:
+
+    npm link spdy
+    npm install --force
+
+Finally, run the app like normal:
+
     node app
