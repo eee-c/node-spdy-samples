@@ -1,0 +1,9 @@
+{
+    "name": "spdy-sample"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express-spdy": "0.1.3"
+    , "jade": ">= 0.0.1"
+  }
+}
